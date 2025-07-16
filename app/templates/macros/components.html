@@ -1,0 +1,64 @@
+{% macro multiselect(name,label, options, selected=[]) %}
+<div class="mb-3">
+  <label for="{{ name }}" class="form-label">{{label}}</label>
+  <select name="{{ name }}" id="{{ name }}" class="form-select multiselect" multiple="multiple" style="width: 100%">
+    {% for value, label in options %}
+      <option value="{{ value }}" {% if value in selected %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <script>
+    $(document).ready(function() {
+      $('#{{ name }}').select2({
+        placeholder: 'Select one or more options',
+        allowClear: true
+      });
+    });
+  </script>
+</div>
+{% endmacro %}
+
+{# TODO: This should definitly be refactored. #}
+{% macro multi_list_dropdown(name, label, options, note_option=False)%}
+<div class="mb-3">
+  <label for="{{ name }}" class="form-label">{{ label }}</label>
+  <select id="{{ name }}_dropdown" class="form-select">
+    <option value="" disabled selected>Select an option</option>
+    {% for value, label in options %}
+      <option value="{{ value }}">{{ label }}</option>
+    {% endfor %}
+  </select>
+  <div id="{{ name }}_selected_list" class="mt-2"></div>
+  <script>
+    $(function() {
+      var options = {{ options|tojson }};
+      $('#{{ name }}_dropdown').on('change', function() {
+        var value = $(this).val();
+        var label = $('#{{ name }}_dropdown option:selected').text();
+        if (!$('#{{ name }}_selected_list').find('[data-value="' + value + '"]').length) {
+          var itemHtml = `
+            <div class="d-flex align-items-center mb-2" data-value="${value}">
+              <input type="hidden" name="{{ name }}[]" value="${value}">
+              <span class="me-2">${label}</span>
+              {% if note_option %}
+              <input type="text" class="form-control form-control-sm me-2" name="{{ name }}_note_${value}" placeholder="Add note">
+              {% endif %}
+              <button type="button" class="btn btn-sm btn-danger remove-selected">Delete</button>
+            </div>
+          `;
+          $('#{{ name }}_selected_list').append(itemHtml);
+        }
+        $(this).val('');
+      });
+      $('#{{ name }}_selected_list').on('click', '.remove-selected', function() {
+        $(this).closest('[data-value]').remove();
+      });
+    });
+  </script>
+</div>
+{%endmacro%}
+{% macro text_input(name,label,placeholder="")%}
+<div class="mb-3">
+  <label for="{{name}}" class="form-label">{{label}}</label>
+  <input type="text" class="form-control" id="{{name}}" name="{{name}}" required placeholder="{{placeholder}}">
+</div>
+{% endmacro %}

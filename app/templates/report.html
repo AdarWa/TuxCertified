@@ -1,0 +1,74 @@
+
+
+{% set page_name = "index"%}
+{% extends "base/base.html" %}
+
+{% import "macros/imports.html" as imports %}
+{% import "macros/components.html" as comps%}
+{% import "macros/config.html" as config %}
+
+{%block head_imports%}
+{{imports.select2css()}}
+{%endblock%}
+
+{%block early_imports%}
+{{imports.select2js()}}
+{%endblock%}
+
+{%block header_text%}Submit Report{%endblock%}
+
+{%block content%}
+<main class="container my-4">
+  {{config.test__}}
+  <form method="post">
+    {{comps.text_input("laptop", "Laptop Model", "e.g. Dell XPS 13")}}
+    {{comps.text_input("cpu", "CPU Model", "e.g. Intel Core i7-1165G7")}}
+    {{comps.text_input("gpu", "GPU Model", "e.g. NVIDIA GeForce RTX 3060")}}
+    {{comps.text_input("ram", "RAM Size (GB)", "e.g. 16")}}
+    {{comps.text_input("storage", "Storage Type and Size", "e.g. 512GB SSD")}}
+    {{comps.text_input("distro", "Distro", "e.g. Ubuntu 24.04")}}
+    {{comps.text_input("kernel", "Kernel Version", "e.g. 6.9.2")}}
+
+    {{comps.multiselect("working","Working Features", config.available_features, selected=[]) }}
+
+    <div class="mb-3">
+      <label class="form-label">Tags</label>
+      <div class="tag-select">
+        <select class="form-select" id="tag-category">
+          <option disabled selected>Select tag category</option>
+          <option>Graphics: Intel</option>
+          <option>Graphics: NVIDIA</option>
+          <option>Graphics: AMD</option>
+          <option>Desktop: GNOME</option>
+          <option>Desktop: KDE</option>
+          <option>Network: Intel WiFi</option>
+          <option>Display: Wayland OK</option>
+          <option>Touchpad: Libinput</option>
+        </select>
+        <button type="button" class="btn btn-sm btn-outline-info mt-1" id="add-tag-btn">Add Tag</button>
+      </div>
+      <input type="hidden" name="tags" id="tags-hidden">
+      <div id="tags-list" class="mt-2"></div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Warnings</label>
+      <div id="warnings-list">
+      </div>
+      <button type="button" class="btn btn-sm btn-outline-warning mt-2" id="add-warning-btn">Add Warning</button>
+    </div>
+
+    <div class="mb-3">
+      <label for="notes" class="form-label">Notes</label>
+      <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Describe what works, what doesn't..."></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="submitted_by" class="form-label">Your name (optional)</label>
+      <input type="text" class="form-control" id="submitted_by" name="submitted_by" placeholder="anonymous">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit Report</button>
+  </form>
+</main>
+{%endblock%}

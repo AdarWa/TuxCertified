@@ -1,0 +1,32 @@
+{% set page_name = "index"%}
+{% extends "base/base.html" %}
+
+{%block header_text%}TuxCertified{%endblock%}
+
+{%block content%}
+<main
+  class="container d-flex flex-column justify-content-center align-items-center text-center my-5"
+  style="flex-grow: 1"
+>
+  <h2 class="mb-3 fw-semibold">Is Your Laptop Linux Compatible?</h2>
+  <p class="mb-4 lead text-secondary">
+    Check quickly if your laptop model supports Linux. Get detailed
+    compatibility info, hardware support, and community reviews.
+  </p>
+  <form id="searchForm" class="w-100 w-md-50 mx-auto" method="get">
+    <div class="input-group mb-3">
+      <input
+        type="text"
+        id="laptopModel"
+        name="query"
+        class="form-control"
+        placeholder="Enter laptop model, e.g. Dell XPS 13"
+        required
+      />
+      <button type="submit" class="btn btn-primary">Check</button>
+    </div>
+  </form>
+  <div id="result" class="fw-semibold" style="min-height: 1.5em"></div>
+</main>
+
+{% endblock%}

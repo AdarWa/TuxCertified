@@ -1,0 +1,80 @@
+body {
+  background-color: #0b1220;
+  color: #f0f0f0;
+}
+header,
+footer {
+  background-color: #1a263a;
+  color: #90caf9;
+  padding: 1rem;
+  text-align: center;
+}
+
+main {
+  flex: 1; /* Pushes footer to the bottom */
+}
+
+
+header h1 {
+  color: #4dd0e1;
+  font-weight: 700;
+  margin: 0;
+  padding: 1rem 0;
+}
+
+.form-label {
+  color: #90caf9;
+}
+.form-check-label {
+  color: #cfd8dc;
+}
+.container {
+  max-width: 700px;
+}
+.tag-select {
+  margin-bottom: 0.5rem;
+}
+.warning-item {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.warning-item input {
+  flex-grow: 1;
+}
+.btn-primary {
+  background-color: #4dd0e1;
+  border-color: #4dd0e1;
+}
+
+.btn-primary:hover {
+  background-color: #36b5c8;
+  border-color: #36b5c8;
+}
+.form-control:focus {
+  border-color: #4dd0e1;
+  box-shadow: 0 0 0 0.25rem rgba(77, 208, 225, 0.5);
+}
+
+/* Dark mode fix for Select2 */
+.select2-container--default .select2-selection--multiple {
+  background-color: #212529;  /* Bootstrap dark bg */
+  color: #f8f9fa;             /* Bootstrap light text */
+  border: 1px solid #495057;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: #343a40;
+  border-color: #6c757d;
+  color: #f8f9fa;
+}
+
+.select2-container--default .select2-results__option {
+  background-color: #212529;
+  color: #f8f9fa;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #495057;
+  color: #fff;
+}
