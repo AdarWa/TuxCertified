@@ -56,9 +56,118 @@
   </script>
 </div>
 {%endmacro%}
-{% macro text_input(name,label,placeholder="")%}
+
+{% macro text_input(name,label,placeholder="", num_input=False, regex=None)%}
 <div class="mb-3">
   <label for="{{name}}" class="form-label">{{label}}</label>
   <input type="text" class="form-control" id="{{name}}" name="{{name}}" required placeholder="{{placeholder}}">
+  {% if num_input %}
+  <script>
+    $(document).ready(function() {
+      $('#{{name}}').on('input', function() {
+        var value = $(this).val();
+        if (isNaN(value)) {
+          $(this).addClass('is-invalid');
+        } else {
+          $(this).removeClass('is-invalid');
+        }
+      });
+    });
+  </script>
+  {% endif %}
+  {% if regex!=None%}
+    <script>
+      $(document).ready(function() {
+        $('#{{name}}').on('input', function() {
+          var value = $(this).val();
+          var pattern = {{ regex|tojson }};
+          var regex = new RegExp(pattern);
+          if (!regex.test(value)) {
+            $(this).addClass('is-invalid');
+          } else {
+            $(this).removeClass('is-invalid');
+          }
+        });
+      });
+    </script>
+  {% endif%}
 </div>
 {% endmacro %}
+
+{% macro searchable_dropdown(name, label, options, placeholder="Select an option") %}
+<div class="mb-3">
+  <label for="{{ name }}" class="form-label">{{ label }}</label>
+  <select id="{{ name }}" name="{{ name }}" class="form-select searchable-dropdown" style="width: 100%">
+    <option value="" disabled selected>{{ placeholder }}</option>
+    {% for value, label in options %}
+      <option value="{{ value }}">{{ label }}</option>
+    {% endfor %}
+  </select>
+  <script>
+    $(document).ready(function() {
+      $('#{{ name }}').select2({
+        placeholder: '{{ placeholder }}',
+        allowClear: true,
+        width: '100%',
+        theme: 'bootstrap-5'
+      });
+    });
+  </script>
+</div>
+{% endmacro %}
+
+
+{% macro textarea_input(name, label, placeholder="")%}
+    <div class="mb-3">
+      <label for="{{name}}" class="form-label">{{label}}</label>
+      <textarea class="form-control" id="{{name}}" name="{{name}}" rows="3" placeholder="{{placeholder}}"></textarea>
+    </div>
+{%endmacro%}
+
+{% macro storage_chooser()%}
+<div class="mb-3" id="storage-section">
+      <label class="form-label">Storage Devices</label>
+      <div id="storage-list">
+        <div class="row g-2 mb-2 storage-item">
+          <div class="col-md-6">
+              <select class="form-select">
+                <option value="" disabled selected>Select an option</option>
+                <option value="ssd">SSD</option>
+                <option value="hdd">Hard Drive</option>
+                <option value="flash">Flash(USB Stick)</option>
+              </select>
+          </div>
+          <div class="col-md-4">
+            <input type="text" name="storage_size[]" class="form-control" placeholder="Size in GB (e.g. 512)">
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-secondary" id="add-storage">Add Storage</button>
+    </section>
+    <script>
+    document.getElementById('add-storage').addEventListener('click', function() {
+      const storageList = document.getElementById('storage-list');
+      const newItem = document.createElement('div');
+      newItem.className = 'row g-2 mb-2 storage-item';
+      newItem.innerHTML = `
+        <div class="col-md-6">
+          <select class="form-select">
+                <option value="" disabled selected>Select an option</option>
+                <option value="ssd">SSD</option>
+                <option value="hdd">Hard Drive</option>
+                <option value="flash">Flash(USB Stick)</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <input type="text" name="storage_size[]" class="form-control" placeholder="Size (e.g. 512GB)">
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-danger remove-storage" onclick="this.closest('.storage-item').remove()">Remove</button>
+        </div>
+      `;
+      storageList.appendChild(newItem);
+    });
+  </script>
+</div>
+{%endmacro%}
+
